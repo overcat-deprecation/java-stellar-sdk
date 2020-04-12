@@ -43,7 +43,7 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp-sse:${okhttpclientVersion}"
     compile 'com.moandjiezana.toml:toml4j:0.7.2'
     // use the android version because we don't want java 8 stuff
-    compile 'com.google.guava:guava:26.0-android'
+    compile 'com.google.guava:guava:28.2-android'
     compile 'com.google.code.gson:gson:2.8.5'
     compile 'commons-io:commons-io:2.6'
     compile 'net.i2p.crypto:eddsa:0.3.0'
