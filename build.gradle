@@ -45,7 +45,7 @@ dependencies {
     // use the android version because we don't want java 8 stuff
     compile 'com.google.guava:guava:26.0-android'
     compile 'com.google.code.gson:gson:2.8.5'
-    compile 'commons-io:commons-io:2.6'
+    compile 'commons-io:commons-io:2.7'
     compile 'net.i2p.crypto:eddsa:0.3.0'
 
     testCompile 'org.mockito:mockito-core:2.21.0'
