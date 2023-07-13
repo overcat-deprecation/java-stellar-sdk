@@ -4,22 +4,9 @@ import com.google.common.base.Optional;
 import com.google.common.io.BaseEncoding;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Arrays;
-import org.stellar.sdk.xdr.AccountID;
-import org.stellar.sdk.xdr.CryptoKeyType;
-import org.stellar.sdk.xdr.MuxedAccount;
-import org.stellar.sdk.xdr.PublicKey;
-import org.stellar.sdk.xdr.PublicKeyType;
-import org.stellar.sdk.xdr.SignerKey;
-import org.stellar.sdk.xdr.Uint256;
-import org.stellar.sdk.xdr.Uint64;
-import org.stellar.sdk.xdr.XdrDataInputStream;
-import org.stellar.sdk.xdr.XdrDataOutputStream;
+import org.stellar.sdk.xdr.*;
 
 class StrKey {
 
@@ -235,6 +222,36 @@ class StrKey {
 
   public static byte[] decodeSha256Hash(String data) {
     return decodeCheck(VersionByte.SHA256_HASH, data.toCharArray());
+  }
+
+  /**
+   * Checks validity of Stellar account ID (G...).
+   *
+   * @param accountID the account ID to check
+   * @return true if the given Stellar account ID is a valid Stellar account ID, false otherwise
+   */
+  public static boolean isValidStellarAccountId(String accountID) {
+    try {
+      decodeStellarAccountId(accountID);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  /**
+   * Checks validity of contract (C...) address.
+   *
+   * @param contractId the contract ID to check
+   * @return true if the given contract ID is a valid contract ID, false otherwise
+   */
+  public static boolean isValidContractId(String contractId) {
+    try {
+      decodeContractId(contractId);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   protected static char[] encodeCheck(VersionByte versionByte, byte[] data) {
