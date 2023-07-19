@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.google.common.base.Optional;
 import com.google.common.io.BaseEncoding;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class TransactionTest {
             },
             null,
             new TransactionPreconditions(null, null, 0, 0, new ArrayList<SignerKey>(), null),
+            Optional.absent(),
             Network.PUBLIC);
 
     transaction.setEnvelopeType(EnvelopeType.ENVELOPE_TYPE_TX_V0);
@@ -87,6 +89,7 @@ public class TransactionTest {
             },
             null,
             new TransactionPreconditions(null, null, 0, 0, new ArrayList<SignerKey>(), null),
+            Optional.absent(),
             Network.PUBLIC);
 
     assertEquals(0, transaction.getSignatures().size());
@@ -124,6 +127,7 @@ public class TransactionTest {
             },
             null,
             new TransactionPreconditions(null, null, 0, 0, new ArrayList<SignerKey>(), null),
+            Optional.absent(),
             Network.PUBLIC);
 
     byte[] preimage = new byte[64];
@@ -159,6 +163,7 @@ public class TransactionTest {
             },
             null,
             new TransactionPreconditions(null, null, 0, 0, new ArrayList<SignerKey>(), null),
+            Optional.absent(),
             Network.TESTNET);
 
     Transaction parsed =

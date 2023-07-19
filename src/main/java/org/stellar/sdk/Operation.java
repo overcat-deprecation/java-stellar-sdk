@@ -200,6 +200,9 @@ public abstract class Operation {
       case LIQUIDITY_POOL_WITHDRAW:
         operation = new LiquidityPoolWithdrawOperation(body.getLiquidityPoolWithdrawOp());
         break;
+      case INVOKE_HOST_FUNCTION:
+        operation = new InvokeHostFunctionOperation.Builder(body.getInvokeHostFunctionOp()).build();
+        break;
       default:
         throw new RuntimeException("Unknown operation body " + body.getDiscriminant());
     }

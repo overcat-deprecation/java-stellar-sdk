@@ -5,9 +5,11 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.stellar.sdk.TransactionPreconditions.TIMEOUT_INFINITE;
 
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
 import java.util.Collection;
 import java.util.List;
 import org.stellar.sdk.TransactionPreconditions.TransactionPreconditionsBuilder;
+import org.stellar.sdk.xdr.SorobanTransactionData;
 import org.stellar.sdk.xdr.TimePoint;
 import org.stellar.sdk.xdr.Uint64;
 
@@ -20,6 +22,7 @@ public class TransactionBuilder {
   private Integer mBaseFee;
   private Network mNetwork;
   private TransactionPreconditions mPreconditions;
+  private Optional<SorobanTransactionData> mSorobanData;
 
   /**
    * Construct a new transaction builder.
@@ -37,6 +40,7 @@ public class TransactionBuilder {
     mNetwork = checkNotNull(network, "Network cannot be null");
     mOperations = newArrayList();
     mPreconditions = TransactionPreconditions.builder().build();
+    mSorobanData = Optional.absent();
   }
 
   /**
@@ -220,6 +224,7 @@ public class TransactionBuilder {
             operations,
             mMemo,
             mPreconditions,
+            mSorobanData,
             mNetwork);
     mSourceAccount.setSequenceNumber(sequenceNumber);
     return transaction;
@@ -242,5 +247,27 @@ public class TransactionBuilder {
         .minTime(new TimePoint(new Uint64(minTime)))
         .maxTime(new TimePoint(new Uint64(maxTime)))
         .build();
+  }
+
+  /**
+   * Sets Soroban data to the transaction. TODO: After adding SorobanServer, add more descriptions.
+   *
+   * @param sorobanData Soroban data to set
+   * @return Builder object so you can chain methods.
+   */
+  public TransactionBuilder setSorobanData(SorobanTransactionData sorobanData) {
+    this.mSorobanData = Optional.fromNullable(sorobanData);
+    return this;
+  }
+
+  /**
+   * Sets Soroban data to the transaction. TODO: After adding SorobanServer, add more descriptions.
+   *
+   * @param sorobanData Soroban data to set
+   * @return Builder object so you can chain methods.
+   */
+  public TransactionBuilder setSorobanData(String sorobanData) {
+    SorobanTransactionData data = Util.sorobanTransactionDataToXDR(sorobanData);
+    return setSorobanData(data);
   }
 }
