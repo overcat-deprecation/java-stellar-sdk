@@ -203,6 +203,14 @@ public abstract class Operation {
       case INVOKE_HOST_FUNCTION:
         operation = new InvokeHostFunctionOperation.Builder(body.getInvokeHostFunctionOp()).build();
         break;
+      case BUMP_FOOTPRINT_EXPIRATION:
+        operation =
+            new BumpFootprintExpirationOperation.Builder(body.getBumpFootprintExpirationOp())
+                .build();
+        break;
+      case RESTORE_FOOTPRINT:
+        operation = new RestoreFootprintOperation();
+        break;
       default:
         throw new RuntimeException("Unknown operation body " + body.getDiscriminant());
     }
