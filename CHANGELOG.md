@@ -4,7 +4,7 @@ As this project is pre 1.0, breaking changes may happen for minor version bumps.
 
 ## Pending
 
-## 0.41.0-beta.1
+## 0.41.0-beta.2
 * Use JDK 11 for CI builds. ([#511](https://github.com/stellar/java-stellar-sdk/issues/511))
 
 ## 0.41.0-beta.0
