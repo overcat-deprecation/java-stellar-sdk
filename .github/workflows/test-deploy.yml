@@ -2,8 +2,8 @@ name: "Test and Deploy"
 
 on:
   push:
-    branches:
-      - '*'
+    branches: [ master ]
+  pull_request:
   release:
     types:
       - created
@@ -47,7 +47,7 @@ jobs:
     
     deploy:
         needs: shadow_jar
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.event_name == 'release' && github.event.action == 'created'
         runs-on: ubuntu-latest
         steps:
             - name: Download JAR Artifact
