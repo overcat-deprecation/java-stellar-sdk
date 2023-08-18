@@ -10,7 +10,7 @@ on:
 
 env:
   JAVA_VERSION: '11'
-  JAVA_DISTRIBUTION: 'oracle'
+  JAVA_DISTRIBUTION: 'microsoft'
 
 jobs:
     test:
