@@ -9,8 +9,8 @@ import org.stellar.sdk.xdr.Uint256;
 
 /**
  * Data model for the <a
- * href="https://github.com/stellar/stellar-protocol/blob/master/core/cap-0040.md#xdr-changes">signed
- * payload signer</a>
+ * href="https://github.com/stellar/stellar-protocol/blob/master/core/cap-0040.md#xdr-changes"
+ * target="_blank">signed payload signer</a>
  */
 public class SignedPayloadSigner {
   public static final int SIGNED_PAYLOAD_MAX_PAYLOAD_LENGTH = 64;
