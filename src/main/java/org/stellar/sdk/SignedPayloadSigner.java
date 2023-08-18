@@ -72,7 +72,8 @@ public class SignedPayloadSigner {
    * get the payload that signatures are produced from.
    *
    * @see <a
-   *     href="https://github.com/stellar/stellar-protocol/blob/master/core/cap-0040.md#semantics"/>
+   *     href="https://github.com/stellar/stellar-protocol/blob/master/core/cap-0040.md#semantics">CAP-0040
+   *     Semantics</a>
    * @return
    */
   public byte[] getPayload() {
