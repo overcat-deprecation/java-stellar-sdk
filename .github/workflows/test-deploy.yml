@@ -37,7 +37,7 @@ jobs:
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: ${{ env.JAVA_DISTRIBUTION }}
-      - name: Test
+      - name: Build JAR
         run: ./gradlew shadowJar
       - name: Persist JAR Artifact
         uses: actions/upload-artifact@v3
