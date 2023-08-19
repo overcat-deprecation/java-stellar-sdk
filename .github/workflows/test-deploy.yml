@@ -42,26 +42,11 @@ jobs:
         - name: Persist JAR Artifact
           uses: actions/upload-artifact@v3
           with:
-            name: output
+            name: jar_outputs
             path: build/libs/stellar-sdk.jar
-    
-    deploy:
-        needs: shadow_jar
-#        if: github.event_name == 'release' && github.event.action == 'created'
-        runs-on: ubuntu-latest
-        steps:
-            - name: Download JAR Artifact
-              uses: actions/download-artifact@v2
-              with:
-                name: output
-                path: output
-            
-#            - name: Upload JAR Artifact to GitHub Release
-#              uses: softprops/action-gh-release@v1
-#              with:
-#                files: build/libs/stellar-sdk.jar
-    
-    publish_docs:
+
+    javadoc:
+        needs: test
         runs-on: ubuntu-latest
         steps:
         - name: Checkout code
@@ -71,6 +56,40 @@ jobs:
           with:
             java-version: ${{ env.JAVA_VERSION }}
             distribution: ${{ env.JAVA_DISTRIBUTION }}
-        - name: Generate Docs
-          run: javadoc -public -splitindex -windowtitle "java-stellar-sdk documentation" -d ./javadoc -sourcepath ./src/main/java/ -subpackages org.stellar.sdk -exclude org.stellar.sdk.xdr
+        - name: Generate Documentation
+          run: ./gradlew javadoc
+        - name: Persist Documentation
+          uses: actions/upload-artifact@v3
+          with:
+            name: javadoc_outputs
+            path: javadoc
+
+    deploy:
+        needs: [ shadow_jar, javadoc ]
+#        if: github.event_name == 'release' && github.event.action == 'created'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Download JAR Artifact
+              uses: actions/download-artifact@v2
+              with:
+                name: jar_outputs
+                path: jar_outputs
+
+            - name: Download Java Documentation
+              uses: actions/download-artifact@v2
+              with:
+                name: javadoc_outputs
+                path: javadoc_outputs
+
+            - name: test
+              run: |
+                ls -l jar_outputs
+                ls -l javadoc_outputs
+                tree jar_outputs
+                tree javadoc_outputs
+
+#            - name: Upload JAR Artifact to GitHub Release
+#              uses: softprops/action-gh-release@v1
+#              with:
+#                files: build/libs/stellar-sdk.jar
 
