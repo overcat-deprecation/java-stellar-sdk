@@ -2,7 +2,7 @@ name: "Test and Deploy"
 
 on:
   push:
-#    branches: [ master ]
+    branches: [ master ]
   pull_request:
   release:
     types:
@@ -13,83 +13,87 @@ env:
   JAVA_DISTRIBUTION: 'microsoft'
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-        - name: Set up JDK
-          uses: actions/setup-java@v2
-          with:
-            java-version: ${{ env.JAVA_VERSION }}
-            distribution: ${{ env.JAVA_DISTRIBUTION }}
-        - name: Test
-          run: ./gradlew check
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+      - name: Test
+        run: ./gradlew check
 
-    shadow_jar:
-        needs: test
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-        - name: Set up JDK
-          uses: actions/setup-java@v2
-          with:
-            java-version: ${{ env.JAVA_VERSION }}
-            distribution: ${{ env.JAVA_DISTRIBUTION }}
-        - name: Test
-          run: ./gradlew shadowJar
-        - name: Persist JAR Artifact
-          uses: actions/upload-artifact@v3
-          with:
-            name: jar_outputs
-            path: build/libs/stellar-sdk.jar
+  shadow_jar:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+      - name: Test
+        run: ./gradlew shadowJar
+      - name: Persist JAR Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: jar
+          path: build/libs/stellar-sdk.jar
 
-    javadoc:
-        needs: test
-        runs-on: ubuntu-latest
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v3
-        - name: Set up JDK
-          uses: actions/setup-java@v2
-          with:
-            java-version: ${{ env.JAVA_VERSION }}
-            distribution: ${{ env.JAVA_DISTRIBUTION }}
-        - name: Generate Documentation
-          run: ./gradlew javadoc
-        - name: Persist Documentation
-          uses: actions/upload-artifact@v3
-          with:
-            name: javadoc_outputs
-            path: javadoc
+  javadoc:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+      - name: Generate Documentation
+        run: ./gradlew javadoc
+      - name: Persist Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: javadoc
+          path: javadoc
 
-    deploy:
-        needs: [ shadow_jar, javadoc ]
-#        if: github.event_name == 'release' && github.event.action == 'created'
-        runs-on: ubuntu-latest
-        steps:
-            - name: Download JAR Artifact
-              uses: actions/download-artifact@v2
-              with:
-                name: jar_outputs
-                path: jar_outputs
+  deploy:
+    needs: [ shadow_jar, javadoc ]
+    permissions:
+      contents: write
+    if: github.event_name == 'release' && github.event.action == 'created'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download JAR Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: jar
+          path: jar
 
-            - name: Download Java Documentation
-              uses: actions/download-artifact@v2
-              with:
-                name: javadoc_outputs
-                path: javadoc_outputs
+      - name: Download Java Documentation
+        uses: actions/download-artifact@v2
+        with:
+          name: javadoc
+          path: javadoc
 
-            - name: test
-              run: |
-                ls -l jar_outputs
-                ls -l javadoc_outputs
-                tree jar_outputs
-                tree javadoc_outputs
+      - name: Archive Documentation
+        run: tar -czf stellar-sdk-javadoc.tar.gz javadoc
 
-#            - name: Upload JAR Artifact to GitHub Release
-#              uses: softprops/action-gh-release@v1
-#              with:
-#                files: build/libs/stellar-sdk.jar
+      - name: Upload JAR Artifact to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            jar/stellar-sdk.jar
+            stellar-sdk-javadoc.tar.gz
 
+      - name: Upload Documentation to GitHub Pages
+        uses: softprops/action-gh-release@v1
+        with:
+          folder: javadoc
