@@ -86,7 +86,7 @@ jobs:
       - name: Archive Documentation
         run: tar -czf stellar-sdk-javadoc.tar.gz javadoc
 
-      - name: Upload JAR Artifact to GitHub Release
+      - name: Upload artifacts to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
@@ -94,6 +94,6 @@ jobs:
             stellar-sdk-javadoc.tar.gz
 
       - name: Upload Documentation to GitHub Pages
-        uses: softprops/action-gh-release@v1
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: javadoc
