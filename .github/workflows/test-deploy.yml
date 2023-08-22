@@ -101,7 +101,7 @@ jobs:
           script: ./gradlew connectedAndroidTest
           target: ${{ matrix.target }}
           arch: ${{ matrix.arch }}
-          profile: 'Pixel 2'
+#          profile: 'Pixel 2'
 
   deploy:
     needs: [ javadoc, android-test ]
