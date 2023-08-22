@@ -66,8 +66,36 @@ jobs:
           name: javadoc
           path: javadoc
 
+  android-test:
+    needs: shadow_jar
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Download JAR Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: jar
+          path: jar
+
+      - name: Copy JAR to libs
+        run: cp jar/stellar-sdk.jar android_test/app/libs/
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: ${{ env.JAVA_VERSION }}
+          java-version: 17
+
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          working-directory: ./android_test
+          api-level: 32
+          script: ./gradlew connectedAndroidTest
+
   deploy:
-    needs: [ shadow_jar, javadoc ]
+    needs: [ shadow_jar, javadoc, android-test ]
     permissions:
       contents: write
     if: github.event_name == 'release' && github.event.action == 'created'
