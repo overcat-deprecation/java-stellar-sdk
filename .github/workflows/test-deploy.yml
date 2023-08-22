@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - soroban
+      - android-test-debug
   pull_request:
   release:
     types:
