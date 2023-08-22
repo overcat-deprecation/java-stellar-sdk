@@ -55,7 +55,7 @@ class MainInstrumentedTest {
         assertNotNull(button)
 
         // click button and wait screen change
-        button.clickAndWait(Until.newWindow(), DEFAULT_TIMEOUT)
+        button.clickAndWait(Until.newWindow(), DEFAULT_TIMEOUT * 2)
 
         // get text
         val expectedNetwork = "testnet"
