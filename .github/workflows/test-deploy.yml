@@ -84,8 +84,8 @@ jobs:
 
       - uses: actions/setup-java@v3
         with:
-          distribution: ${{ env.JAVA_VERSION }}
           java-version: 17
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
