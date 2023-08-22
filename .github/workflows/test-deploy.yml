@@ -95,7 +95,7 @@ jobs:
           script: ./gradlew connectedAndroidTest
 
   deploy:
-    needs: [ shadow_jar, javadoc, android-test ]
+    needs: [ javadoc, android-test ]
     permissions:
       contents: write
     if: github.event_name == 'release' && github.event.action == 'created'
