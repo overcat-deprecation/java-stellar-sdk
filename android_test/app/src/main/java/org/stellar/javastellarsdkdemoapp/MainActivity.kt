@@ -82,7 +82,7 @@ fun Main(networkViewModel: NetworkViewModel, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = networkViewModel.network ?: "No network",
+            text = networkViewModel.network ?: "No network info",
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }

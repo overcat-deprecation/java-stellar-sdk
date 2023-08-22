@@ -70,8 +70,11 @@ jobs:
     needs: shadow_jar
     runs-on: macos-latest
     strategy:
+      fail-fast: false
       matrix:
         api-level: [26, 33]  # minSdk and targetSdk, see {project_root}/android_test/app/build.gradle.kts
+        target: [default, google_apis]
+        arch: [x86, x86_64, arm64-v8a]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -85,19 +88,20 @@ jobs:
       - name: Copy JAR to libs
         run: cp jar/stellar-sdk.jar android_test/app/libs/
 
-      - uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
+#      - uses: actions/setup-java@v3
+#        with:
+#          java-version: 17
+#          distribution: ${{ env.JAVA_DISTRIBUTION }}
 
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           working-directory: ./android_test
-          api-level: 33
+          api-level: ${{ matrix.api-level }}
           script: ./gradlew connectedAndroidTest
-          target: google_apis
-          arch: x86_64
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          profile: 'Pixel 2'
 
   deploy:
     needs: [ javadoc, android-test ]

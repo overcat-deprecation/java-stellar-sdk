@@ -41,11 +41,11 @@ class MainInstrumentedTest {
         )
 
         // get text
-        val textNoNetwork = device.wait(
-            Until.findObject(By.text("No network")),
+        val textNoNetworkInfo = device.wait(
+            Until.findObject(By.text("No network info")),
             DEFAULT_TIMEOUT
         )
-        assertNotNull(textNoNetwork)
+        assertNotNull(textNoNetworkInfo)
 
         // get button
         val button = device.wait(
