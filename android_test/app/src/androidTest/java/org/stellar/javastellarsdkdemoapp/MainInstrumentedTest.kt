@@ -19,7 +19,7 @@ private const val PACKAGE = "org.stellar.javastellarsdkdemoapp"
 @RunWith(AndroidJUnit4::class)
 class MainInstrumentedTest {
     @Test
-    fun demoTest() {
+    fun testGetNetwork() {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         // open app
         device.pressHome()
@@ -58,7 +58,7 @@ class MainInstrumentedTest {
         button.clickAndWait(Until.newWindow(), DEFAULT_TIMEOUT)
 
         // get text
-        val expectedNetwork = "public"
+        val expectedNetwork = "testnet"
         val textNetwork = device.wait(
             Until.findObject(By.text(expectedNetwork)),
             DEFAULT_TIMEOUT

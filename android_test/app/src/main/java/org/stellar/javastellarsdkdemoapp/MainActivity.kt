@@ -1,6 +1,7 @@
 package org.stellar.javastellarsdkdemoapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +29,7 @@ import kotlinx.coroutines.withContext
 import org.stellar.javastellarsdkdemoapp.ui.theme.JavaStellarSDKDemoAppTheme
 import org.stellar.sdk.Server
 
-private const val HORIZON_SERVER = "https://h.fchain.io"
+private const val HORIZON_SERVER = "https://horizon-testnet.stellar.org/"
 private const val PUBLIC = "Public Global Stellar Network ; September 2015"
 private const val TESTNET = "Test SDF Network ; September 2015"
 
@@ -114,6 +115,7 @@ private fun getNetwork(): String? {
             }
         }
     } catch (e: Exception) {
+        Log.e("MainActivity", "getNetwork: ${e.message}", e)
         null
     }
 }
