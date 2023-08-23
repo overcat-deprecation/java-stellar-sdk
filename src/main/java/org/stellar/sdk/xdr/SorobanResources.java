@@ -24,10 +24,6 @@ import java.io.IOException;
 //      uint32 readBytes;
 //      // The maximum number of bytes this transaction can write to ledger
 //      uint32 writeBytes;
-//
-//      // Maximum size of dynamic metadata produced by this contract (
-//      // currently only includes the events).
-//      uint32 extendedMetaDataSizeBytes;
 //  };
 
 //  ===========================================================================
@@ -74,23 +70,12 @@ public class SorobanResources implements XdrElement {
     this.writeBytes = value;
   }
 
-  private Uint32 extendedMetaDataSizeBytes;
-
-  public Uint32 getExtendedMetaDataSizeBytes() {
-    return this.extendedMetaDataSizeBytes;
-  }
-
-  public void setExtendedMetaDataSizeBytes(Uint32 value) {
-    this.extendedMetaDataSizeBytes = value;
-  }
-
   public static void encode(XdrDataOutputStream stream, SorobanResources encodedSorobanResources)
       throws IOException {
     LedgerFootprint.encode(stream, encodedSorobanResources.footprint);
     Uint32.encode(stream, encodedSorobanResources.instructions);
     Uint32.encode(stream, encodedSorobanResources.readBytes);
     Uint32.encode(stream, encodedSorobanResources.writeBytes);
-    Uint32.encode(stream, encodedSorobanResources.extendedMetaDataSizeBytes);
   }
 
   public void encode(XdrDataOutputStream stream) throws IOException {
@@ -103,18 +88,12 @@ public class SorobanResources implements XdrElement {
     decodedSorobanResources.instructions = Uint32.decode(stream);
     decodedSorobanResources.readBytes = Uint32.decode(stream);
     decodedSorobanResources.writeBytes = Uint32.decode(stream);
-    decodedSorobanResources.extendedMetaDataSizeBytes = Uint32.decode(stream);
     return decodedSorobanResources;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(
-        this.footprint,
-        this.instructions,
-        this.readBytes,
-        this.writeBytes,
-        this.extendedMetaDataSizeBytes);
+    return Objects.hashCode(this.footprint, this.instructions, this.readBytes, this.writeBytes);
   }
 
   @Override
@@ -127,8 +106,7 @@ public class SorobanResources implements XdrElement {
     return Objects.equal(this.footprint, other.footprint)
         && Objects.equal(this.instructions, other.instructions)
         && Objects.equal(this.readBytes, other.readBytes)
-        && Objects.equal(this.writeBytes, other.writeBytes)
-        && Objects.equal(this.extendedMetaDataSizeBytes, other.extendedMetaDataSizeBytes);
+        && Objects.equal(this.writeBytes, other.writeBytes);
   }
 
   @Override
@@ -162,7 +140,6 @@ public class SorobanResources implements XdrElement {
     private Uint32 instructions;
     private Uint32 readBytes;
     private Uint32 writeBytes;
-    private Uint32 extendedMetaDataSizeBytes;
 
     public Builder footprint(LedgerFootprint footprint) {
       this.footprint = footprint;
@@ -184,18 +161,12 @@ public class SorobanResources implements XdrElement {
       return this;
     }
 
-    public Builder extendedMetaDataSizeBytes(Uint32 extendedMetaDataSizeBytes) {
-      this.extendedMetaDataSizeBytes = extendedMetaDataSizeBytes;
-      return this;
-    }
-
     public SorobanResources build() {
       SorobanResources val = new SorobanResources();
       val.setFootprint(this.footprint);
       val.setInstructions(this.instructions);
       val.setReadBytes(this.readBytes);
       val.setWriteBytes(this.writeBytes);
-      val.setExtendedMetaDataSizeBytes(this.extendedMetaDataSizeBytes);
       return val;
     }
   }
