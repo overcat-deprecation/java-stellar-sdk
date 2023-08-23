@@ -50,13 +50,13 @@ import org.stellar.sdk.xdr.ExtensionPoint;
 import org.stellar.sdk.xdr.HostFunction;
 import org.stellar.sdk.xdr.HostFunctionType;
 import org.stellar.sdk.xdr.Int64;
+import org.stellar.sdk.xdr.InvokeContractArgs;
 import org.stellar.sdk.xdr.LedgerEntryType;
 import org.stellar.sdk.xdr.LedgerFootprint;
 import org.stellar.sdk.xdr.LedgerKey;
 import org.stellar.sdk.xdr.SCSymbol;
 import org.stellar.sdk.xdr.SCVal;
 import org.stellar.sdk.xdr.SCValType;
-import org.stellar.sdk.xdr.SCVec;
 import org.stellar.sdk.xdr.SorobanAuthorizationEntry;
 import org.stellar.sdk.xdr.SorobanAuthorizedFunction;
 import org.stellar.sdk.xdr.SorobanAuthorizedFunctionType;
@@ -917,7 +917,6 @@ public class SorobanServerTest {
                             .readOnly(new LedgerKey[] {ledgerKey})
                             .readWrite(new LedgerKey[] {})
                             .build())
-                    .extendedMetaDataSizeBytes(new Uint32(new XdrUnsignedInteger(216)))
                     .readBytes(new Uint32(new XdrUnsignedInteger(699)))
                     .writeBytes(new Uint32(new XdrUnsignedInteger(0)))
                     .instructions(new Uint32(new XdrUnsignedInteger(34567)))
@@ -1365,19 +1364,18 @@ public class SorobanServerTest {
                         new HostFunction.Builder()
                             .discriminant(HostFunctionType.HOST_FUNCTION_TYPE_INVOKE_CONTRACT)
                             .invokeContract(
-                                new SCVec(
-                                    new SCVal[] {
-                                      new Address(contractId).toSCVal(),
-                                      new SCVal.Builder()
-                                          .discriminant(SCValType.SCV_SYMBOL)
-                                          .sym(new SCSymbol(new XdrString("increment")))
-                                          .build(),
-                                      new Address(opInvokerKp.getAccountId()).toSCVal(),
-                                      new SCVal.Builder()
-                                          .discriminant(SCValType.SCV_U32)
-                                          .u32(new Uint32(new XdrUnsignedInteger(10)))
-                                          .build()
-                                    }))
+                                new InvokeContractArgs.Builder()
+                                    .contractAddress(new Address(contractId).toSCAddress())
+                                    .functionName(new SCSymbol(new XdrString("increment")))
+                                    .args(
+                                        new SCVal[] {
+                                          new Address(opInvokerKp.getAccountId()).toSCVal(),
+                                          new SCVal.Builder()
+                                              .discriminant(SCValType.SCV_U32)
+                                              .u32(new Uint32(new XdrUnsignedInteger(10)))
+                                              .build()
+                                        })
+                                    .build())
                             .build())
                     .auth(auth)
                     .build());
