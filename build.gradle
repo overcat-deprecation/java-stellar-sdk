@@ -1,7 +1,7 @@
 import org.gradle.internal.os.OperatingSystem
 
 buildscript {
-    ext.okhttpclientVersion = '4.10.1'
+    ext.okhttpclientVersion = '4.11.0'
 }
 
 plugins {

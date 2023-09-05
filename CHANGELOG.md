@@ -6,6 +6,7 @@ As this project is pre 1.0, breaking changes may happen for minor version bumps.
 
 ## 0.40.1
 * Fix the issue of unable to parse liquidity_pool_revoked effect properly. ([#521](https://github.com/stellar/java-stellar-sdk/pull/521))
+* Bump okhttp and okhttp-sse from `v4.10.1` to `v4.11.0`.
 
 ## 0.40.0
 * Add strkey support for contract ids ([#471](https://github.com/stellar/java-stellar-sdk/pull/471))
