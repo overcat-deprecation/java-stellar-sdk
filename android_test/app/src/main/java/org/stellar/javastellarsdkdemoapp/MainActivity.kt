@@ -27,6 +27,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.stellar.javastellarsdkdemoapp.ui.theme.JavaStellarSDKDemoAppTheme
 import org.stellar.sdk.Server
+import shadow.okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 private const val HORIZON_SERVER = "https://horizon.stellar.org/"
 private const val PUBLIC = "Public Global Stellar Network ; September 2015"
@@ -98,9 +100,24 @@ fun MainPreview() {
 }
 
 private fun getNetwork(): String? {
-    val server = Server(HORIZON_SERVER)
+    val client = OkHttpClient.Builder().connectTimeout(60L, TimeUnit.SECONDS)
+        .readTimeout(60L, TimeUnit.SECONDS).retryOnConnectionFailure(true).build()
+
+    val server = Server(HORIZON_SERVER, client, client)
     return try {
-        "public"
+        when (server.root().networkPassphrase) {
+            PUBLIC -> {
+                "public"
+            }
+
+            TESTNET -> {
+                "testnet"
+            }
+
+            else -> {
+                "others"
+            }
+        }
     } catch (e: Exception) {
         null
     }
