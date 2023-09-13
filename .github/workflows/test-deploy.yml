@@ -103,8 +103,6 @@ jobs:
         with:
           name: jar
           path: android_test/app/libs/
-      - name: debug
-        run: ls -al /bin
       - uses: actions/setup-java@v3
         with:
           java-version: 17 # TODO: Android Gradle plugin requires Java 11, consider replacing other parts with Java 17.
@@ -115,7 +113,7 @@ jobs:
           working-directory: ./android_test
           api-level: ${{ matrix.emulator.api-level }}
           target: ${{ matrix.emulator.target }}
-          script: '"sleep 10"'
+          script: '"/bin/sleep 10 && ./gradlew connectedCheck"'
           arch: x86_64
           profile: 'pixel_2'
 
