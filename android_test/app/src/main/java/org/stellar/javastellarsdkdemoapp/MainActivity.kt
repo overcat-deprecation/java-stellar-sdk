@@ -1,6 +1,7 @@
 package org.stellar.javastellarsdkdemoapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
@@ -119,6 +120,7 @@ private fun getNetwork(): String? {
             }
         }
     } catch (e: Exception) {
+        Log.e("MainActivity", "getNetwork: ", e)
         null
     }
 }
