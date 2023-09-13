@@ -100,19 +100,7 @@ fun MainPreview() {
 private fun getNetwork(): String? {
     val server = Server(HORIZON_SERVER)
     return try {
-        when (server.root().networkPassphrase) {
-            PUBLIC -> {
-                "public"
-            }
-
-            TESTNET -> {
-                "testnet"
-            }
-
-            else -> {
-                "others"
-            }
-        }
+        "public"
     } catch (e: Exception) {
         null
     }
