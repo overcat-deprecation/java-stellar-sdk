@@ -113,7 +113,7 @@ jobs:
           working-directory: ./android_test
           api-level: ${{ matrix.emulator.api-level }}
           target: ${{ matrix.emulator.target }}
-          script: ./gradlew connectedCheck
+          script: sleep 30s && ./gradlew connectedCheck
           arch: x86_64
           profile: 'pixel_2'
 
