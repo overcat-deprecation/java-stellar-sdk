@@ -103,6 +103,8 @@ jobs:
         with:
           name: jar
           path: android_test/app/libs/
+      - name: debug
+        run: ls -al /bin
       - uses: actions/setup-java@v3
         with:
           java-version: 17 # TODO: Android Gradle plugin requires Java 11, consider replacing other parts with Java 17.
