@@ -23,7 +23,7 @@ spotless {
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8.toString()
-version = '0.41.0-beta.3'
+version = '0.41.0-beta.20'
 group = 'stellar'
 
 compileJava.options.encoding = 'UTF-8'
