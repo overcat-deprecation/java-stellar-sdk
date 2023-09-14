@@ -6,7 +6,6 @@ buildscript {
 
 plugins {
     id "io.freefair.lombok" version "6.4.1"
-    id "com.github.johnrengelman.shadow" version "7.1.2"
     id "java"
     id "com.github.ben-manes.versions" version "0.42.0"
     id "project-report"
@@ -23,39 +22,40 @@ spotless {
     }
 }
 
-
 sourceCompatibility = JavaVersion.VERSION_1_8.toString()
 version = '0.41.0-beta.3'
 group = 'stellar'
-jar.enabled = false
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 javadoc.options.encoding = 'UTF-8'
 
-
-shadowJar {
+jar {
     manifest {
         attributes(
                 "Implementation-Title": "stellar-sdk",
                 "Implementation-Version": project.getVersion()
         )
     }
-    duplicatesStrategy DuplicatesStrategy.EXCLUDE
-    archiveClassifier.set('')
     archiveFileName.set('stellar-sdk.jar')
-    relocate('com.', 'shadow.com.') {
-        // okhttp hardcodes android platform class loading to this package, shadowing would attempt to rewrite the hardcode
-        // to be 'shadow.com.android.org.conscrypt' which we don't want to happen.
-        exclude 'com.android.org.conscrypt'
+}
+
+tasks.register('uberJar', Jar) {
+    // https://docs.gradle.org/current/userguide/working_with_files.html#sec:creating_uber_jar_example
+    manifest {
+        attributes(
+                "Implementation-Title": "stellar-sdk",
+                "Implementation-Version": project.getVersion()
+        )
     }
-    relocate 'net.', 'shadow.net.'
-    relocate 'okhttp3', 'shadow.okhttp3'
-    relocate 'okio', 'shadow.okio'
-    relocate 'kotlin', 'shadow.kotlin'
-    relocate 'org.intellij', 'shadow.org.intellij'
-    relocate 'org.jetbrains', 'shadow.org.jetbrains'
-    relocate 'org.apache', 'shadow.org.apache'
+    archiveClassifier.set('uber')
+    archiveFileName.set('stellar-sdk-uber.jar')
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
+    from sourceSets.main.output
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
 }
 
 repositories {
@@ -110,10 +110,17 @@ tasks.register('javadocJar', Jar) {
 publishing {
     publications {
         sdkLibrary(MavenPublication) { publication ->
-            project.shadow.component(publication)
+            artifact tasks.jar
+            artifact tasks.uberJar
         }
         javadocPublication(MavenPublication) { publication ->
             artifact tasks.javadocJar
         }
     }
+}
+
+artifacts {
+    archives tasks.jar
+    archives tasks.uberJar
+    archives tasks.javadocJar
 }
