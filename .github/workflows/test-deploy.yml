@@ -92,7 +92,7 @@ jobs:
         # minSdk and targetSdk, see ${project_root}/android_test/app/build.gradle.kts
         # TODO: Investigate why it is unstable on API 33.
         emulator: [
-          { api-level: 26, target: google_apis },
+          { api-level: 33, target: playstore },
           { api-level: 32, target: playstore }
         ]
     steps:
@@ -113,7 +113,7 @@ jobs:
           working-directory: ./android_test
           api-level: ${{ matrix.emulator.api-level }}
           target: ${{ matrix.emulator.target }}
-          script: ./gradlew connectedCheck
+          script: ./gradlew connectedCheck --debug
           arch: x86_64
           profile: 'pixel_2'
 
