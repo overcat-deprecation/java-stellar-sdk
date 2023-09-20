@@ -73,17 +73,6 @@ tasks {
         })
     }
 
-    val javadocJar by creating(Jar::class) {
-        manifest {
-            attributes["Implementation-Title"] = "stellar-sdk"
-            attributes["Implementation-Version"] = version
-        }
-        archiveClassifier = "javadoc"
-        archiveFileName = "stellar-sdk-javadoc.jar"
-        dependsOn(javadoc)
-        from(javadoc.get().destinationDir)
-    }
-
     javadoc {
         destinationDir = file("javadoc")
         isFailOnError = false
@@ -95,6 +84,17 @@ tasks {
             memberLevel = JavadocMemberLevel.PUBLIC
             encoding = "UTF-8"
         }
+    }
+
+    val javadocJar by creating(Jar::class) {
+        manifest {
+            attributes["Implementation-Title"] = "stellar-sdk"
+            attributes["Implementation-Version"] = version
+        }
+        archiveClassifier = "javadoc"
+        archiveFileName = "stellar-sdk-javadoc.jar"
+        dependsOn(javadoc)
+        from(javadoc.get().destinationDir) // It needs to be placed after the javadoc task, otherwise it cannot read the path we set.
     }
 
     register<Copy>("updateGitHook") {
