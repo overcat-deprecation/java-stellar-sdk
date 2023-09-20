@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "stellar"
-version = "0.41.0"
+version = "0.41.1-beta.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
