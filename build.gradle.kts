@@ -5,6 +5,7 @@ plugins {
     id("project-report")
     id("com.diffplug.spotless") version "6.21.0"
     id("com.github.ben-manes.versions") version "0.48.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.freefair.lombok") version "8.3"
 }
 
@@ -84,6 +85,28 @@ tasks {
         from(javadoc.get().destinationDir)
     }
 
+    shadowJar {
+        manifest {
+            attributes["Implementation-Title"] = "stellar-sdk"
+            attributes["Implementation-Version"] = version
+        }
+        archiveClassifier = "shadow"
+        archiveFileName = "stellar-sdk-shadow.jar"
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        relocate("com.", "shadow.com.") {
+            // okhttp hardcodes android platform class loading to this package, shadowing would attempt to rewrite the hardcode
+            // to be 'shadow.com.android.org.conscrypt' which we don't want to happen.
+            exclude("com.android.org.conscrypt")
+        }
+        relocate("net.", "shadow.net.")
+        relocate("okhttp3", "shadow.okhttp3")
+        relocate("okio", "shadow.okio")
+        relocate("kotlin", "shadow.kotlin")
+        relocate("org.intellij", "shadow.org.intellij")
+        relocate("org.jetbrains", "shadow.org.jetbrains")
+        relocate("org.apache", "shadow.org.apache")
+    }
+
     javadoc {
         destinationDir = file("javadoc")
         isFailOnError = false
@@ -118,6 +141,7 @@ artifacts {
     archives(tasks.jar)
     archives(tasks["uberJar"])
     archives(tasks["javadocJar"])
+    archives(tasks["shadowJar"])
 }
 
 publishing {
@@ -126,6 +150,7 @@ publishing {
             from(components["java"])
             artifact(tasks["uberJar"])
             artifact(tasks["javadocJar"])
+            artifact(tasks["shadowJar"])
             pom {
                 name.set("java-stellar-sdk")
                 description.set("The Java Stellar SDK library provides APIs to build transactions and connect to Horizon and Soroban-RPC server.")
