@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "org.stellar.javastellarsdkdemoapp"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
