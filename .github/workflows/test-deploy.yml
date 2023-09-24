@@ -76,6 +76,9 @@ jobs:
         # TODO: Investigate why it is unstable on API 33.
         emulator: [
           { api-level: 21, target: google_apis },
+          { api-level: 22, target: google_apis },
+          { api-level: 23, target: google_apis },
+          { api-level: 24, target: google_apis },
           { api-level: 32, target: playstore }
         ]
     steps:
