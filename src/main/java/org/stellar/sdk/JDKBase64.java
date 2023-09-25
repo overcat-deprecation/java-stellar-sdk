@@ -1,6 +1,7 @@
 package org.stellar.sdk;
 
-class JDKBase64Provider implements Base64 {
+/** Default implementation of {@link Base64} using the JDK's {@link java.util.Base64}. */
+class JDKBase64 implements Base64 {
   @Override
   public String encodeToString(byte[] data) {
     return java.util.Base64.getEncoder().encodeToString(data);

@@ -1,5 +1,6 @@
 package org.stellar.sdk;
 
+/** Base64 interface used by the SDK to encode and decode strings and bytes. */
 public interface Base64 {
   /**
    * Encodes bytes to base64 string
