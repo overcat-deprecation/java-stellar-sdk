@@ -11,10 +11,8 @@ import org.stellar.sdk.spi.SdkProvider;
  * <p>The class will try to load an implementation of {@link Base32} using the {@link
  * ServiceLoader}, if no implementation is found it will use the default implementation {@link
  * ApacheBase32}.
- *
- * <p>Note: The class should be limited to internal use only, and users should not use it directly.
  */
-public class Base32Factory {
+class Base32Factory {
   @Getter private static Base32 instance = new ApacheBase32();
 
   static {
