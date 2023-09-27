@@ -16,8 +16,6 @@
  */
 package org.stellar.javastellarsdkdemoapp;
 
-import static org.stellar.sdk.ApacheCodec.BaseNCodec.EOF;
-
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
