@@ -1,7 +1,7 @@
 package org.stellar.sdk;
 
 /** Default implementation of {@link Base32} using the Apache Commons Codec. */
-class ApacheCodecBase32 implements Base32 {
+class ApacheBase32 implements Base32 {
   // org.apache.commons.codec.binary.Base32 is thread-safe.
   private final org.apache.commons.codec.binary.Base32 base32 =
       new org.apache.commons.codec.binary.Base32();
